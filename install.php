@@ -14,7 +14,8 @@ if ($connection->connect_errno) {
     echo ("Connection Error" . $connection->connect_errno);
 } else {
     $sql = file_get_contents("data/init.sql");
-    $connection->exec($sql);
+    $statement = $connection->prepare($sql);
+    $statement->execute();
     echo "Database and table users created successfully.";
     $connection->close();
 }
