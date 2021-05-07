@@ -7,15 +7,15 @@
  */
 
 require "config.php";
-
-$connection = new mysqli($host, $username, $password, $dbname);
-
-if ($connection->connect_errno) {
-    echo ("Connection Error" . $connection->connect_errno);
-} else {
+$options    = array(
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+  );
+try {
+    $connection = new PDO("mysql:host=$host", $username, $password, $options);
     $sql = file_get_contents("data/init.sql");
-    $statement = $connection->prepare($sql);
-    $statement->execute();
+    $connection->exec($sql);
+    
     echo "Database and table users created successfully.";
-    $connection->close();
+} catch(PDOException $error) {
+    echo $sql . "<br>" . $error->getMessage();
 }
